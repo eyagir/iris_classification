@@ -7,11 +7,17 @@
 # charateristics of that flower. For instance attributes including petal
 # length, width, etc. are the "features" that determine the classification of a
 # given iris flower.
+
+
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+import numpy as np
 
+# Import the iris dataset as provided by the sklearn Python module:
 from sklearn.datasets import load_iris
+from sklearn.neighbors import KNeighborsClassifier 
+from sklearn.model_selection import train_test_split
 
 # This dataset is provided in the form of a dictionary
 iris = load_iris()
@@ -31,9 +37,19 @@ petal_width_label = iris.feature_names[3]
 plt.scatter(sepal_length, sepal_width, c=iris.target)
 plt.xlabel(sepal_length_label)
 plt.ylabel(sepal_width_label)
+# plt.show(block=True)
+# plt.savefig("matplotlib.png") # can't use show since running from linux subsytem
 
-#plt.show(block=True)
-plt.savefig("matplotlib.png") # can't use show since running from linux subsytem
+# random_state=0 keeps split consistent. Similar to random seed
+x_train, x_test, y_train, y_test = train_test_split(iris['data'], iris['target'], random_state=0)
+knn = KNeighborsClassifier(n_neighbors=1) # n_neighbors dedicates how many neighbors you will comparing against
 
+# fitting model onto training data
+knn.fit(x_train, y_train)
 
+x_new = np.array([[5.0,2.9,1.0,0.2]])
 
+# prediction = knn.predict(x_new)
+# print(prediction)
+
+print(knn.score(x_test, y_test))
